@@ -216,7 +216,10 @@ main {
   font-weight: 600;
   font-size: clamp(2.6rem, 12vw, 5.2rem);
   color: var(--ivory);
-  filter: drop-shadow(0 14px 22px rgba(138, 85, 96, 0.35));
+  /* box-shadow instead of filter: a filter on the card forces the
+     whole 3D subtree to repaint every animation frame (jank) */
+  border-radius: 0.7rem;
+  box-shadow: 0 14px 22px rgba(138, 85, 96, 0.32);
 }
 
 .half {
@@ -267,10 +270,12 @@ main {
   transform-origin: bottom center;
   z-index: 2;
   pointer-events: none;
+  will-change: transform;
+  transform: rotateX(0);
 }
 
 .leaf.flipping {
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: transform 0.5s cubic-bezier(0.36, 0, 0.66, 0.2);
   transform: rotateX(-180deg);
 }
 

@@ -33,6 +33,9 @@ function setFlip(unit, next) {
     return;
   }
 
+  // if the previous flip is still mid-air (e.g. background tab), land it first
+  if (f.finish) f.finish();
+
   // stage the leaf: front shows old, back shows new
   f.front.textContent = prev;
   f.back.textContent = next;
@@ -40,13 +43,19 @@ function setFlip(unit, next) {
   f.leaf.classList.add('flipping');
 
   const done = () => {
+    if (f.finish !== done) return;
+    f.finish = null;
     f.bottom.textContent = next;
+    // sync the leaf's front to the new value BEFORE un-rotating it,
+    // so the instant reset is pixel-identical and invisible
+    f.front.textContent = next;
     f.leaf.classList.remove('flipping');
     f.leaf.removeEventListener('transitionend', done);
   };
+  f.finish = done;
   f.leaf.addEventListener('transitionend', done);
   // safety in case transitionend is missed (background tab)
-  setTimeout(done, 700);
+  setTimeout(done, 650);
 }
 
 const pad = (n) => String(n).padStart(2, '0');
