@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f9f5ec" />
+    <title>Salman & Hani — Countdown to Qubool Hai</title>
+    <meta
+      name="description"
+      content="Counting every heartbeat until Salman & Hani say Qubool Hai — Sunday, 11th October 2026, Arasikere."
+    />
+    <meta property="og:title" content="Salman & Hani — Countdown to Qubool Hai" />
+    <meta property="og:description" content="Counting every heartbeat until we say Qubool Hai — 11 . 10 . 2026" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body data-target="2026-10-11T12:30:00+05:30">
+    <!-- drifting petals + gold fireflies -->
+    <canvas id="sky" aria-hidden="true"></canvas>
+
+    <!-- slow-turning golden rays behind everything -->
+    <div class="rays" aria-hidden="true"></div>
+
+    <!-- floral valance -->
+    <div class="garland" aria-hidden="true"></div>
+
+    <main>
+      <div class="monogram" aria-hidden="true">
+        <img src="./img/wreath.webp" alt="" width="800" height="665" decoding="async" />
+        <span class="monogram-text">S &amp; H</span>
+      </div>
+
+      <p class="eyebrow">Until We Say Qubool Hai</p>
+      <h1 class="names">Salman <span class="amp">&amp;</span> Hani</h1>
+      <p class="tagline">Counting every heartbeat…</p>
+
+      <!-- the flip clock -->
+      <div class="clock" id="clock" role="timer" aria-live="off">
+        <div class="flip" data-unit="days">
+          <div class="card">
+            <div class="half top"><span>--</span></div>
+            <div class="half bottom"><span>--</span></div>
+            <div class="leaf">
+              <div class="leaf-face leaf-front"><span>--</span></div>
+              <div class="leaf-face leaf-back"><span>--</span></div>
+            </div>
+          </div>
+          <p class="unit-label">Days</p>
+        </div>
+        <div class="flip" data-unit="hours">
+          <div class="card">
+            <div class="half top"><span>--</span></div>
+            <div class="half bottom"><span>--</span></div>
+            <div class="leaf">
+              <div class="leaf-face leaf-front"><span>--</span></div>
+              <div class="leaf-face leaf-back"><span>--</span></div>
+            </div>
+          </div>
+          <p class="unit-label">Hours</p>
+        </div>
+        <div class="flip" data-unit="minutes">
+          <div class="card">
+            <div class="half top"><span>--</span></div>
+            <div class="half bottom"><span>--</span></div>
+            <div class="leaf">
+              <div class="leaf-face leaf-front"><span>--</span></div>
+              <div class="leaf-face leaf-back"><span>--</span></div>
+            </div>
+          </div>
+          <p class="unit-label">Minutes</p>
+        </div>
+        <div class="flip" data-unit="seconds">
+          <div class="card">
+            <div class="half top"><span>--</span></div>
+            <div class="half bottom"><span>--</span></div>
+            <div class="leaf">
+              <div class="leaf-face leaf-front"><span>--</span></div>
+              <div class="leaf-face leaf-back"><span>--</span></div>
+            </div>
+          </div>
+          <p class="unit-label">Seconds</p>
+        </div>
+      </div>
+
+      <!-- shown when the moment arrives -->
+      <div class="married" id="married" hidden>
+        <p class="married-text">Alhamdulillah!</p>
+        <p class="married-sub">Salman &amp; Hani are married 🤲</p>
+      </div>
+
+      <div class="gold-rule"></div>
+      <p class="when">Sunday, 11th October 2026 · 12:30 PM</p>
+      <p class="where">Masjid-e-Usmaniya (Markaz), Arasikere</p>
+
+      <a class="btn" href="https://salmanwedshani.life/" rel="noopener">Open The Invitation ✉</a>
+    </main>
+
+    <noscript>
+      <p style="text-align:center;font-size:1.2rem;padding:1rem">
+        Insha Allah — Sunday, 11th October 2026, 12:30 PM, Arasikere.
+      </p>
+    </noscript>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

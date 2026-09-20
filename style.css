@@ -1,0 +1,374 @@
+:root {
+  --ivory: #f9f5ec;
+  --blush: #f6e0e4;
+  --blush-deep: #eecdd3;
+  --rose: #b06a77;
+  --mauve: #8a5560;
+  --card: #8f5b68;
+  --card-deep: #7a4b57;
+  --text: #5d4a4e;
+  --muted: #a08a8d;
+  --gold: #b98c4a;
+  --gold-bright: #d4b378;
+  --gold-dim: rgba(185, 140, 74, 0.4);
+
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-script: 'Great Vibes', cursive;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(1100px 700px at 50% -8%, rgba(246, 224, 228, 0.8), transparent 70%),
+    radial-gradient(1200px 800px at 50% 115%, rgba(238, 205, 211, 0.55), transparent 70%),
+    var(--ivory);
+  color: var(--text);
+  font-family: var(--font-serif);
+  text-align: center;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── ambient layers ───────────────────────────────────── */
+
+#sky {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* slow-turning golden rays, masked to a soft halo behind the clock */
+.rays {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 160vmax;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(212, 179, 120, 0.14) 12deg,
+    transparent 26deg,
+    transparent 60deg,
+    rgba(246, 224, 228, 0.28) 74deg,
+    transparent 90deg,
+    transparent 130deg,
+    rgba(212, 179, 120, 0.12) 144deg,
+    transparent 158deg,
+    transparent 210deg,
+    rgba(246, 224, 228, 0.24) 224deg,
+    transparent 240deg,
+    transparent 292deg,
+    rgba(212, 179, 120, 0.13) 306deg,
+    transparent 320deg
+  );
+  -webkit-mask-image: radial-gradient(circle, black 0%, transparent 62%);
+  mask-image: radial-gradient(circle, black 0%, transparent 62%);
+  animation: rays-turn 70s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes rays-turn {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* floral valance — seamless mirror-tile, natural hanging edge */
+.garland {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: clamp(120px, 18vh, 240px);
+  background-image: url('./img/garland-band-light.webp');
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: center top;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(138, 85, 96, 0.12));
+}
+
+/* ── content ──────────────────────────────────────────── */
+
+main {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 62rem;
+  padding: 0.5rem 1.2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
+}
+
+.monogram {
+  position: relative;
+  margin-top: -0.5rem;
+  animation: float 5.5s ease-in-out infinite;
+}
+
+.monogram img {
+  width: clamp(7.5rem, 24vw, 10rem);
+  height: auto;
+  filter: drop-shadow(0 10px 22px rgba(138, 85, 96, 0.25));
+}
+
+.monogram-text {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-script);
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+  color: var(--rose);
+  white-space: nowrap;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.eyebrow {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.names {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(3rem, 11vw, 5.6rem);
+  padding: 0.12em 0.4em;
+  line-height: 1.2;
+  background: linear-gradient(
+    105deg,
+    var(--rose) 25%,
+    #cf9484 42%,
+    var(--gold-bright) 50%,
+    #cf9484 58%,
+    var(--rose) 75%
+  );
+  background-size: 230% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5.5s ease-in-out infinite;
+  filter: drop-shadow(0 2px 14px rgba(176, 106, 119, 0.3));
+}
+
+.names .amp {
+  font-size: 0.55em;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 115% 0; }
+  50% { background-position: -15% 0; }
+}
+
+.tagline {
+  font-style: italic;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+}
+
+/* ── flip clock ───────────────────────────────────────── */
+
+.clock {
+  display: flex;
+  gap: clamp(0.5rem, 2.4vw, 1.4rem);
+  margin: clamp(1.6rem, 4vh, 2.8rem) 0 0;
+  perspective: 900px;
+}
+
+.flip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.card {
+  position: relative;
+  width: clamp(4.4rem, 20vw, 8.5rem);
+  height: clamp(5rem, 23vw, 9.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 12vw, 5.2rem);
+  color: var(--ivory);
+  filter: drop-shadow(0 14px 22px rgba(138, 85, 96, 0.35));
+}
+
+.half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--card), var(--card-deep));
+  border: 1px solid rgba(212, 179, 120, 0.55);
+}
+
+.half span,
+.leaf-face span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(5rem, 23vw, 9.5rem);
+  line-height: clamp(5rem, 23vw, 9.5rem);
+  text-align: center;
+}
+
+.half.top {
+  top: 0;
+  border-radius: 0.7rem 0.7rem 0 0;
+  border-bottom: none;
+}
+
+.half.top span { top: 0; }
+
+.half.bottom {
+  bottom: 0;
+  border-radius: 0 0 0.7rem 0.7rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.22);
+  background: linear-gradient(180deg, #85535f, var(--card-deep));
+}
+
+.half.bottom span { bottom: 0; }
+
+/* the folding leaf */
+.leaf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  transform-style: preserve-3d;
+  transform-origin: bottom center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.leaf.flipping {
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.6, 1);
+  transform: rotateX(-180deg);
+}
+
+.leaf-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(212, 179, 120, 0.55);
+}
+
+.leaf-front {
+  background: linear-gradient(180deg, var(--card), #83515d);
+  border-radius: 0.7rem 0.7rem 0 0;
+}
+
+.leaf-front span { top: 0; }
+
+.leaf-back {
+  transform: rotateX(180deg);
+  background: linear-gradient(180deg, #85535f, var(--card-deep));
+  border-radius: 0 0 0.7rem 0.7rem;
+}
+
+.leaf-back span { bottom: 0; }
+
+.unit-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── married state ────────────────────────────────────── */
+
+.married-text {
+  font-family: var(--font-script);
+  font-size: clamp(3rem, 12vw, 5rem);
+  color: var(--rose);
+  margin-top: 1.5rem;
+}
+
+.married-sub {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  color: var(--mauve);
+}
+
+/* ── footer bits ──────────────────────────────────────── */
+
+.gold-rule {
+  width: min(15rem, 55vw);
+  height: 1px;
+  margin: clamp(1.8rem, 4.5vh, 3rem) auto 1.2rem;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.when {
+  font-size: clamp(1.1rem, 3.4vw, 1.4rem);
+  letter-spacing: 0.14em;
+  color: var(--mauve);
+}
+
+.where {
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.95rem 2.4rem;
+  background: linear-gradient(90deg, var(--rose), #c98d9a);
+  border: none;
+  border-radius: 2px;
+  color: var(--ivory);
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 10px 24px rgba(176, 106, 119, 0.3);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(176, 106, 119, 0.4);
+}
+
+/* ── reduced motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .rays,
+  .monogram,
+  .names { animation: none; }
+  .leaf.flipping { transition: none; }
+}
