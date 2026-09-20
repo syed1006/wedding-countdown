@@ -6,15 +6,18 @@ const TARGET = new Date(document.body.dataset.target).getTime();
 
 /* ── flip clock ─────────────────────────────────────────── */
 
+// Two-leaf flip (after cloworm/countdown): the old top half folds down
+// while the new bottom half unfolds up, meeting in the middle.
 const flips = {};
 document.querySelectorAll('.flip').forEach((el) => {
   flips[el.dataset.unit] = {
+    card: el.querySelector('.card'),
     top: el.querySelector('.half.top span'),
     bottom: el.querySelector('.half.bottom span'),
-    leaf: el.querySelector('.leaf'),
-    front: el.querySelector('.leaf-front span'),
-    back: el.querySelector('.leaf-back span'),
+    leafT: el.querySelector('.leaf-t span'),
+    leafB: el.querySelector('.leaf-b span'),
     value: null,
+    finish: null,
   };
 });
 
@@ -28,37 +31,44 @@ function setFlip(unit, next) {
     // first paint / reduced motion: no animation
     f.top.textContent = next;
     f.bottom.textContent = next;
-    f.front.textContent = next;
-    f.back.textContent = next;
+    f.leafT.textContent = next;
+    f.leafB.textContent = next;
     return;
   }
 
   // if the previous flip is still mid-air (e.g. background tab), land it first
   if (f.finish) f.finish();
 
-  // stage the leaf: front shows old, back shows new
-  f.front.textContent = prev;
-  f.back.textContent = next;
-  f.top.textContent = next; // revealed as the leaf folds down
-  f.leaf.classList.add('flipping');
+  // stage: static top already shows the NEW value (revealed as the old
+  // leaf folds away); leaves carry old-top and new-bottom
+  f.top.textContent = next;
+  f.leafT.textContent = prev;
+  f.leafB.textContent = next;
+
+  // restart the CSS animations
+  f.card.classList.remove('flipping');
+  void f.card.offsetWidth;
+  f.card.classList.add('flipping');
 
   const done = () => {
     if (f.finish !== done) return;
     f.finish = null;
     f.bottom.textContent = next;
-    // sync the leaf's front to the new value BEFORE un-rotating it,
-    // so the instant reset is pixel-identical and invisible
-    f.front.textContent = next;
-    f.leaf.classList.remove('flipping');
-    f.leaf.removeEventListener('transitionend', done);
+    f.card.classList.remove('flipping');
+    f.card.removeEventListener('animationend', onEnd);
+  };
+  const onEnd = (e) => {
+    if (e.animationName === 'flipBottom') done();
   };
   f.finish = done;
-  f.leaf.addEventListener('transitionend', done);
-  // safety in case transitionend is missed (background tab)
-  setTimeout(done, 650);
+  f.card.addEventListener('animationend', onEnd);
+  // safety in case animationend is missed (background tab)
+  setTimeout(done, 850);
 }
 
 const pad = (n) => String(n).padStart(2, '0');
+const beatsEl = document.getElementById('beats');
+const RESTING_BPM = 72;
 let lastMinute = null;
 let lastHour = null;
 let finished = false;
@@ -70,11 +80,15 @@ function tick() {
     if (!finished) {
       finished = true;
       document.getElementById('clock').style.display = 'none';
+      document.getElementById('heartbeat').style.display = 'none';
       document.getElementById('married').hidden = false;
       celebrationLoop();
     }
     return;
   }
+
+  // ≈ how many heartbeats until Qubool Hai (resting pulse)
+  beatsEl.textContent = Math.floor((diff / 1000 / 60) * RESTING_BPM).toLocaleString('en-US');
 
   const s = Math.floor(diff / 1000);
   const days = Math.floor(s / 86400);

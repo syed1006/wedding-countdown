@@ -209,43 +209,62 @@ main {
 }
 
 .card {
+  --card-h: clamp(5rem, 23vw, 9.5rem);
   position: relative;
   width: clamp(4.4rem, 20vw, 8.5rem);
-  height: clamp(5rem, 23vw, 9.5rem);
+  height: var(--card-h);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   font-size: clamp(2.6rem, 12vw, 5.2rem);
   color: var(--ivory);
-  /* box-shadow instead of filter: a filter on the card forces the
-     whole 3D subtree to repaint every animation frame (jank) */
   border-radius: 0.7rem;
   box-shadow: 0 14px 22px rgba(138, 85, 96, 0.32);
+  perspective: 620px;
 }
 
-.half {
+/* punch-hole notches on the hinge, like a real flip clock */
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ivory);
+  transform: translateY(-50%);
+  z-index: 4;
+}
+
+.card::before { left: -4px; }
+.card::after { right: -4px; }
+
+.half,
+.leaf {
   position: absolute;
   left: 0;
   right: 0;
   height: 50%;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--card), var(--card-deep));
   border: 1px solid rgba(212, 179, 120, 0.55);
 }
 
 .half span,
-.leaf-face span {
+.leaf span {
   position: absolute;
   left: 0;
   right: 0;
-  height: clamp(5rem, 23vw, 9.5rem);
-  line-height: clamp(5rem, 23vw, 9.5rem);
+  height: var(--card-h);
+  line-height: var(--card-h);
   text-align: center;
 }
 
+/* static halves — top is dimmer, like the reference clock */
 .half.top {
   top: 0;
   border-radius: 0.7rem 0.7rem 0 0;
   border-bottom: none;
+  background: linear-gradient(180deg, #83515d, #774955);
 }
 
 .half.top span { top: 0; }
@@ -253,55 +272,64 @@ main {
 .half.bottom {
   bottom: 0;
   border-radius: 0 0 0.7rem 0.7rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.22);
-  background: linear-gradient(180deg, #85535f, var(--card-deep));
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  background: linear-gradient(180deg, #8f5b68, var(--card-deep));
 }
 
 .half.bottom span { bottom: 0; }
 
-/* the folding leaf */
+/* animated leaves: the old top folds down while the new bottom unfolds */
 .leaf {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 50%;
-  transform-style: preserve-3d;
-  transform-origin: bottom center;
-  z-index: 2;
+  opacity: 0;
   pointer-events: none;
-  will-change: transform;
-  transform: rotateX(0);
-}
-
-.leaf.flipping {
-  transition: transform 0.5s cubic-bezier(0.36, 0, 0.66, 0.2);
-  transform: rotateX(-180deg);
-}
-
-.leaf-face {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border: 1px solid rgba(212, 179, 120, 0.55);
+  will-change: transform;
+  z-index: 2;
 }
 
-.leaf-front {
-  background: linear-gradient(180deg, var(--card), #83515d);
+.leaf-t {
+  top: 0;
+  transform-origin: bottom center;
   border-radius: 0.7rem 0.7rem 0 0;
+  border-bottom: none;
+  background: linear-gradient(180deg, #83515d, #774955);
 }
 
-.leaf-front span { top: 0; }
+.leaf-t span { top: 0; }
 
-.leaf-back {
-  transform: rotateX(180deg);
-  background: linear-gradient(180deg, #85535f, var(--card-deep));
+.leaf-b {
+  top: 50%;
+  transform-origin: top center;
   border-radius: 0 0 0.7rem 0.7rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  background: linear-gradient(180deg, #8f5b68, var(--card-deep));
+  transform: rotateX(180deg);
 }
 
-.leaf-back span { bottom: 0; }
+.leaf-b span { bottom: 0; }
+
+.card.flipping .leaf {
+  opacity: 1;
+}
+
+.card.flipping .leaf-t {
+  animation: flipTop 0.7s ease-in forwards;
+}
+
+.card.flipping .leaf-b {
+  animation: flipBottom 0.7s ease-in forwards;
+}
+
+@keyframes flipTop {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(-180deg); }
+}
+
+@keyframes flipBottom {
+  from { transform: rotateX(180deg); }
+  to { transform: rotateX(0deg); }
+}
 
 .unit-label {
   font-size: 0.72rem;
@@ -309,6 +337,66 @@ main {
   text-indent: 0.32em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* ── heartbeat counter ────────────────────────────────── */
+
+.heartbeat {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: clamp(1.4rem, 3.5vh, 2.2rem);
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  color: var(--mauve);
+  font-style: italic;
+}
+
+.heartbeat #beats {
+  font-style: normal;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--rose);
+}
+
+/* a little heart that beats lub-dub, once per second */
+.heart {
+  position: relative;
+  width: 1.15rem;
+  height: 1.05rem;
+  animation: lubdub 1s ease-in-out infinite;
+  transform-origin: center;
+  flex-shrink: 0;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0.62rem;
+  height: 0.95rem;
+  border-radius: 0.62rem 0.62rem 0 0;
+  background: linear-gradient(180deg, #c9808d, var(--rose));
+}
+
+.heart::before {
+  left: 0.28rem;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.heart::after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+@keyframes lubdub {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.28); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.16); }
+  56% { transform: scale(1); }
 }
 
 /* ── married state ────────────────────────────────────── */
@@ -374,6 +462,9 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .rays,
   .monogram,
+  .heart,
   .names { animation: none; }
-  .leaf.flipping { transition: none; }
+  .card.flipping .leaf-t,
+  .card.flipping .leaf-b { animation: none; }
+  .card.flipping .leaf { opacity: 0; }
 }

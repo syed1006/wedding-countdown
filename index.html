@@ -46,10 +46,8 @@
           <div class="card">
             <div class="half top"><span>--</span></div>
             <div class="half bottom"><span>--</span></div>
-            <div class="leaf">
-              <div class="leaf-face leaf-front"><span>--</span></div>
-              <div class="leaf-face leaf-back"><span>--</span></div>
-            </div>
+            <div class="leaf leaf-t"><span>--</span></div>
+            <div class="leaf leaf-b"><span>--</span></div>
           </div>
           <p class="unit-label">Days</p>
         </div>
@@ -57,10 +55,8 @@
           <div class="card">
             <div class="half top"><span>--</span></div>
             <div class="half bottom"><span>--</span></div>
-            <div class="leaf">
-              <div class="leaf-face leaf-front"><span>--</span></div>
-              <div class="leaf-face leaf-back"><span>--</span></div>
-            </div>
+            <div class="leaf leaf-t"><span>--</span></div>
+            <div class="leaf leaf-b"><span>--</span></div>
           </div>
           <p class="unit-label">Hours</p>
         </div>
@@ -68,10 +64,8 @@
           <div class="card">
             <div class="half top"><span>--</span></div>
             <div class="half bottom"><span>--</span></div>
-            <div class="leaf">
-              <div class="leaf-face leaf-front"><span>--</span></div>
-              <div class="leaf-face leaf-back"><span>--</span></div>
-            </div>
+            <div class="leaf leaf-t"><span>--</span></div>
+            <div class="leaf leaf-b"><span>--</span></div>
           </div>
           <p class="unit-label">Minutes</p>
         </div>
@@ -79,13 +73,17 @@
           <div class="card">
             <div class="half top"><span>--</span></div>
             <div class="half bottom"><span>--</span></div>
-            <div class="leaf">
-              <div class="leaf-face leaf-front"><span>--</span></div>
-              <div class="leaf-face leaf-back"><span>--</span></div>
-            </div>
+            <div class="leaf leaf-t"><span>--</span></div>
+            <div class="leaf leaf-b"><span>--</span></div>
           </div>
           <p class="unit-label">Seconds</p>
         </div>
+      </div>
+
+      <!-- counting every heartbeat, literally -->
+      <div class="heartbeat" id="heartbeat">
+        <span class="heart" aria-hidden="true"></span>
+        <p><span id="beats">—</span> heartbeats to go</p>
       </div>
 
       <!-- shown when the moment arrives -->
